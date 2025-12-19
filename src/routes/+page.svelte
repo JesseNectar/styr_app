@@ -8,9 +8,10 @@
     let { data } = $props()
     let trips = $derived(data.trips)
     let stations = data.stations
+    let showDatabar = $state(true)
 
     let selectedStation = $state(undefined)
-    
+
    
 
 
@@ -33,9 +34,12 @@
     
 </script>
 <DeckMap selectedStation={selectedStation} stations={stations} trips={trips} time={time} start_of_day = {start_of_day.getTime()} end_of_day = {end_of_day.getTime()}/>
-<DataBar bind:selectedStation={selectedStation} stations = {stations} trips bind:time = {time} bind:animationOn = {animationOn} start_of_day = {start_of_day.getTime()} end_of_day = {end_of_day.getTime()} />
+
+{#if showDatabar}
+<DataBar bind:showDatabar={showDatabar} bind:selectedStation={selectedStation} stations = {stations} trips bind:time = {time} bind:animationOn = {animationOn} start_of_day = {start_of_day.getTime()} end_of_day = {end_of_day.getTime()} />
+{/if}
 {#if selectedStation}
-<StationOverlay bind:selectedStation = {selectedStation} />
+<StationOverlay bind:showDatabar={showDatabar} bind:selectedStation = {selectedStation} />
 {/if}
 
 

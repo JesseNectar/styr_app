@@ -25,7 +25,7 @@ const COLOR_RANGE = [
   [209, 55, 78]
 ];
 
-let pathColor=[65, 105, 225]
+let pathColor=[0, 211, 144]
 let deckOverlay = $state(new DeckOverlay({}))
 
 
@@ -74,7 +74,7 @@ onMount(() => {
     map = new mapboxgl.Map({
     container: mapContainer,
     accessToken: 'pk.eyJ1IjoiamVzc2VuZWN0YXIiLCJhIjoiY2xtbHp5aXZ4MGhzYjJxbnkwcnFudnJldCJ9.ntcJa5PbkxwMQyVC1Tdobg',
-    style: `mapbox://styles/mapbox/streets-v12?optimize=true`,
+    style: `mapbox://styles/mapbox/light-v11?optimize=true`,
     center: [11.952377, 57.700481],
     zoom: 12.5,
     pitch:60,
