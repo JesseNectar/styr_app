@@ -26,7 +26,7 @@ class="absolute left-1/2 -translate-x-1/2 w-1/2  p-3 bg-white/90 rounded-lg shad
 
   </div>
     <div>
-        <input type="range" min="0" max="10000" bind:value={time} class="mt-3 mb-3 range range-sm range-success w-full" />
+        <input type="range" min="0" max="10000" bind:value={time} class="mt-3 mb-3 range text-[steelblue] range-sm w-full" />
 
     </div>
 
@@ -50,10 +50,3 @@ class="absolute left-1/2 -translate-x-1/2 w-1/2  p-3 bg-white/90 rounded-lg shad
 
 </div>
 
-
-
-
-
-<style>
-
-</style>

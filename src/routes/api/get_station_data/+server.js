@@ -5,6 +5,11 @@ export async function POST({ request }) {
     try {
         const { stationName } = await request.json();
         
+        
+        
+
+
+
 
         if (!stationName) {
             return json({ error: 'stationName is required' }, { status: 400 });
@@ -65,9 +70,27 @@ export async function POST({ request }) {
         const departures = departuresRes.rows
         const arrivals = arrivalsRes.rows
 
+        // Station daily trips
+
+        const dailyTripsRes = await pool.query(
+            `
+            SELECT
+            to_char(start_time AT TIME ZONE 'Europe/Stockholm', 'YYYY-MM-DD') AS start_date,
+            count(*)::int as total
+            FROM trips
+            WHERE start_station_name = $1
+            GROUP BY 1
+            ORDER BY 1 ASC
+
+
+            `,[stationName]
+        )
+        const dailyTrips = dailyTripsRes.rows
+        console.log(dailyTrips)
         return json({
             departures,
-            arrivals
+            arrivals,
+            dailyTrips
         })
     
 

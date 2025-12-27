@@ -20,7 +20,7 @@
     let time = $state(0)
 
         setInterval(() => {
-        if(animationOn){
+        if(animationOn && time < 10000){
             time += 1
         }
         }, 30);
@@ -29,7 +29,7 @@
         // This is the start and end times of today
     let start_of_day = new Date(new Date().setHours(6, 0, 0, 0));
 
-    let end_of_day = new Date()
+    let end_of_day = new Date(new Date().setHours(24, 0, 0, 0));
 
     
 </script>
@@ -39,7 +39,7 @@
 <DataBar bind:showDatabar={showDatabar} bind:selectedStation={selectedStation} stations = {stations} trips bind:time = {time} bind:animationOn = {animationOn} start_of_day = {start_of_day.getTime()} end_of_day = {end_of_day.getTime()} />
 {/if}
 {#if selectedStation}
-<StationOverlay bind:showDatabar={showDatabar} bind:selectedStation = {selectedStation} />
+<StationOverlay weather_data={data.weather_data} bind:showDatabar={showDatabar} bind:selectedStation = {selectedStation} />
 {/if}
 
 

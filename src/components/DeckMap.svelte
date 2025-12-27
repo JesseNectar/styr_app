@@ -16,18 +16,8 @@ let time_animation_scale = $derived(d3.scaleTime().domain([start_of_day, end_of_
 let map;
 let mapContainer;
 
-const COLOR_RANGE = [
-  [1, 152, 189],
-  [73, 227, 206],
-  [216, 254, 181],
-  [254, 237, 177],
-  [254, 173, 84],
-  [209, 55, 78]
-];
-
-let pathColor=[0, 211, 144]
+let pathColor=[70, 130,180]
 let deckOverlay = $state(new DeckOverlay({}))
-
 
 $effect(() => {
   const layers = [
@@ -38,9 +28,9 @@ $effect(() => {
       getTimestamps: d => d.timestamps.map(d => time_animation_scale(+d)),
       getColor: pathColor,
       opacity: 1,
-      widthMinPixels: 4,
+      widthMinPixels: 3,
       fadeTrail: true,
-      trailLength: 20,
+      trailLength: 10,
       currentTime: time,
       coordinateSystem: COORDINATE_SYSTEM.LNGLAT,
       capRounded: true,
@@ -49,12 +39,10 @@ $effect(() => {
   ];
 
   if (selectedStation) {
-
-    
     layers.push(
       new ColumnLayer({
         id: 'station-marker',
-        data: [selectedStation],   // single-item array
+        data: [selectedStation],
         diskResolution: 25,
         radius: 10,
         elevationScale: 0.1,
@@ -66,7 +54,6 @@ $effect(() => {
       })
     );
   }
-
   deckOverlay.setProps({ layers });
 });
 
@@ -74,27 +61,22 @@ onMount(() => {
     map = new mapboxgl.Map({
     container: mapContainer,
     accessToken: 'pk.eyJ1IjoiamVzc2VuZWN0YXIiLCJhIjoiY2xtbHp5aXZ4MGhzYjJxbnkwcnFudnJldCJ9.ntcJa5PbkxwMQyVC1Tdobg',
-    style: `mapbox://styles/mapbox/light-v11?optimize=true`,
+    style: `mapbox://styles/mapbox/streets-v12?optimize=true`,
     center: [11.952377, 57.700481],
-    zoom: 12.5,
-    pitch:60,
-    bearing:180
+    zoom: 12.9,
+    pitch:68,
+    bearing:-90
     });   
     map.addControl(deckOverlay)
-    //console.log(map)
 });
-
-
 
 $effect(()=>{
     if (!map || !selectedStation) return;
-   
-
     const container = map.getContainer();
     const width = container.clientWidth;
     map.flyTo({
         center: [selectedStation.long, selectedStation.lat],
-        zoom: 15,
+        zoom: 16,
         speed: 0.4,
         bearing:0,
         pitch:50,
@@ -104,17 +86,12 @@ $effect(()=>{
     });
 })
 
-
-
- 
-
 </script>
 
 <div class="map" bind:this={mapContainer} />
 <div class="time-display">
   Current Time: {d3.timeFormat('%H:%M:%S')(time_animation_scale.invert(time))}
 </div>
-
 
 <style>
 .map {
