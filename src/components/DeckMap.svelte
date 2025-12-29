@@ -64,7 +64,7 @@ onMount(() => {
     style: `mapbox://styles/mapbox/streets-v12?optimize=true`,
     center: [11.952377, 57.700481],
     zoom: 12.9,
-    pitch:68,
+    pitch:0,
     bearing:-90
     });   
     map.addControl(deckOverlay)
@@ -89,9 +89,7 @@ $effect(()=>{
 </script>
 
 <div class="map" bind:this={mapContainer} />
-<div class="time-display">
-  Current Time: {d3.timeFormat('%H:%M:%S')(time_animation_scale.invert(time))}
-</div>
+
 
 <style>
 .map {

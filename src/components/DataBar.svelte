@@ -20,7 +20,7 @@ let filteredStationsArray = $derived(stations.filter(s=>s.station_name.toLowerCa
 <div 
 in:fly={{y:-100,duration:400, delay:500}}
 out:fly={{y:-100,duration:400}}
-class="absolute left-1/2 -translate-x-1/2 w-1/2  p-3 bg-white/90 rounded-lg shadow-lg">
+class="absolute left-1/2 -translate-x-1/2 w-1/2  p-3 bg-white/90 rounded-b-lg shadow-lg">
   <div class="text-gray-600 font-bold text-2xl">
       TID: {d3.timeFormat('%H:%M')(time_animation_scale.invert(time))}
 
@@ -41,7 +41,7 @@ class="absolute left-1/2 -translate-x-1/2 w-1/2  p-3 bg-white/90 rounded-lg shad
             setTimeout(()=>{selectedStation = station; showDatabar = false},50)
              
             
-            stationSearchString=''}} class="mb-2 p-3 rounded shaddow-md hover:bg-success hover:cursor-pointer text-gray-600">{station.station_name}</div>
+            stationSearchString=''}} class="mb-2 p-3 rounded shaddow-md hover:bg-[steelblue] hover:text-white hover:cursor-pointer text-gray-600">{station.station_name}</div>
         {/each}
     </div>
 

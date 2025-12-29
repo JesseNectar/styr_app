@@ -8,7 +8,7 @@
 
     let width = $state(0);
  
-    let height = 350;
+    let height = 400;
     let svg;
 
     const parseDate = d3.timeParse('%Y-%m-%d');
@@ -37,7 +37,7 @@
     });
 
 
-    const margin = { top: 20, right: 40, bottom: 40, left: 25 };
+    const margin = { top: 20, right: 40, bottom: 40, left: 35 };
 
     let chartWidth = $derived((width / 2)-margin.left -margin.right)
 
@@ -61,11 +61,11 @@
         }
     );
 
-    let yAxis = $derived.by(() =>{
-         return d3.axisLeft(dailyTripsYScale).ticks(10)
-        } 
-    );
+   let yAxis = $derived.by(() => {
+    const [min, max] = dailyTripsYScale.domain();
 
+    return d3.axisLeft(dailyTripsYScale).ticks(max < 10? 1:10)
+    });
 
     let yAxisG;
     let axisG;
@@ -118,8 +118,6 @@
 
 </script>
 <svelte:window bind:innerWidth={width} />
-
-<div class="text-xl mt-3 mb-3 font-extrabold text-gray-600">Totalt antal avgångar per dag</div>
 
 <svg {height} width = {chartWidth} bind:this={svg}>
     <defs>

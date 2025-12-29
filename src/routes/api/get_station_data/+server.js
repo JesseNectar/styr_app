@@ -74,23 +74,78 @@ export async function POST({ request }) {
 
         const dailyTripsRes = await pool.query(
             `
-            SELECT
-            to_char(start_time AT TIME ZONE 'Europe/Stockholm', 'YYYY-MM-DD') AS start_date,
-            count(*)::int as total
-            FROM trips
+            WITH days AS (
+            SELECT generate_series(current_date - interval '29 days', current_date, interval '1 day')::date as day
+            ),
+
+            daily_totals AS (
+
+            SELECT 
+            (start_time AT TIME ZONE 'Europe/Stockholm')::date AS start_date, 
+            count(*)::int as total 
+            FROM trips 
             WHERE start_station_name = $1
-            GROUP BY 1
+            GROUP BY 1 
             ORDER BY 1 ASC
+            )
 
-
+            SELECT
+            to_char(d.day, 'YYYY-MM-DD') as start_date,
+            coalesce(dt.total, 0)::int as total
+            FROM days d 
+            LEFT JOIN daily_totals dt on d.day = dt.start_date;
             `,[stationName]
         )
         const dailyTrips = dailyTripsRes.rows
-        console.log(dailyTrips)
+        
+        // total trips for day so far
+
+        const dailyTotalRes = await pool.query(
+            `
+            SELECT
+            count(*) as total_trips,
+            SUM(distance_in_m) as total_m
+            FROM trips 
+            WHERE start_station_name = $1
+            --AND start_time::date = current_date
+            `,[stationName]
+        )
+        const dailyTotals = dailyTotalRes.rows
+        
+        // top 5 most popular end stations
+        
+        const top5DestinationsRes = await pool.query(
+            `
+            WITH end_station_top_list AS (
+            
+            SELECT
+            end_station_name,
+            COUNT(*) as total
+            FROM trips
+            WHERE start_station_name = $1
+            GROUP BY 1
+
+            )
+
+            SELECT
+            *
+            FROM end_station_top_list
+            ORDER BY total DESC
+            LIMIT 5
+            `,[stationName]
+
+
+        )
+        const top5Destinations = top5DestinationsRes.rows
+        console.log(top5Destinations)
+
+        
         return json({
             departures,
             arrivals,
-            dailyTrips
+            dailyTrips,
+            dailyTotals,
+            top5Destinations
         })
     
 

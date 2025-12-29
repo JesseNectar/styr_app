@@ -67,6 +67,7 @@
 
         stationData = await res.json()
         console.log(stationData)
+        
 
 
         })
@@ -93,14 +94,51 @@
 <div
 in:fade={{duration:1000, delay:2000}}
 out:fly={{x:-200,duration:500}}
-class="absolute z-20 w-1/2 top-0 left-0 p-10 h-full shadow-lg bg-white/90">
+class="absolute z-20 w-1/2 top-0 left-0 p-10 h-full shadow-xl backdrop-blur-2xl bg-white/60">
     <div class="text-4xl text-gray-600 font-extrabold">{selectedStation.station_name}</div>
+    <div class="text-sm text-gray-600 italic font-bold mt-1">(Lat: {selectedStation.lat} Lon: {selectedStation.long})</div>
     <button class="font-bold  btn btn-primary btn-circle hover:scale-105 absolute top-2 right-2 " onclick={()=>{selectedStation = undefined, showDatabar=true}}>
         <iconify-icon icon="lucide:x" width="24" height="24"></iconify-icon> 
     </button>
 
-    <!--DAILY TRIPS WITH WEATHER ICONS-->
+    
     {#if stationData}
+    <div class="divider text-gray-600 font-bold">Övergipande statistik och top 5 resmål</div>
+
+    <div class="grid grid-cols-3 gap-5 mb-10">
+        <div class="col-span-1">
+          
+            <div class="text-3xl text-gray-600 font-extrabold">{stationData.dailyTotals[0].total_trips} <span class="text-sm text-gray-600 font-normal"> (Antal resor senaste 30 dagarna)</span></div>
+            <div class="text-3xl text-gray-600 font-extrabold">{stationData.dailyTotals[0].total_m / 1000} km</div>
+
+        </div>
+        
+        <div class="col-span-2 text-gray-600">
+          
+            <div class="overflow-x-auto">
+            <table class="table table-sm font-bold text-gray-600">
+
+                <tbody>
+                <!-- row 1 -->
+                {#each stationData.top5Destinations as dest, index}
+                <tr>
+                    <th>{index+1}</th>
+                    <td>{dest.end_station_name}</td>
+                    <td>{dest.total}</td>
+
+                </tr>
+                {/each}
+           
+                </tbody>
+            </table>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <div class="divider text-gray-600 font-bold">Antal resor per dag (senaste 30 dagarna)</div>
+    <!--DAILY TRIPS WITH WEATHER ICONS-->
     <DailyTrips weather_data={weather_data} dailyTrips={stationData.dailyTrips} />
     {/if}
     <!-- <div class="text-xl text-gray-600 font-extrabold mt-5">Avgångar (per timma)</div>

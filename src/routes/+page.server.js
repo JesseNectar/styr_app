@@ -122,11 +122,11 @@ export async function load() {
     
     const min_temperature_data = await fetch('https://opendata-download-metobs.smhi.se/api/version/1.0/parameter/19/station/71420/period/latest-months/data.json')
     const min_temperatures = await min_temperature_data.json()
-    const min_temps = min_temperatures.value.slice(30)
+    const min_temps = min_temperatures.value.slice(-30)
  
     const cloud_data = await fetch('https://opendata-download-metobs.smhi.se/api/version/1.0/parameter/10/station/71415/period/latest-months/data.json')
     const cloud_data_per_hour = await cloud_data.json()
-    const cloudy_percent = classifyDailyCloudiness(cloud_data_per_hour.value).slice(-31,-1)
+    const cloudy_percent = classifyDailyCloudiness(cloud_data_per_hour.value).slice(-30,-1)
     
     const precipitation_data = await fetch('https://opendata-download-metobs.smhi.se/api/version/1.0/parameter/5/station/71420/period/latest-months/data.json')
     const precipitation = await precipitation_data.json()
@@ -137,20 +137,20 @@ export async function load() {
         let weather_data = []
         cp.forEach((c)=>{
             
-            console.log('DATE: ', c.date)
+            //console.log('DATE: ', c.date)
 
             let avg_temp_obj_for_day = at.find(a =>c.date === a.ref)
             let avg_temp_for_day = avg_temp_obj_for_day.value
-            console.log('AVG TEMP: ', avg_temp_for_day)
+            //console.log('AVG TEMP: ', avg_temp_for_day)
             let min_temp_obj_for_day = mt.find(m =>c.date === m.ref)
             let min_temp_for_day = min_temp_obj_for_day.value
 
-            console.log('MIN TEMP: ', min_temp_for_day)
+            //console.log('MIN TEMP: ', min_temp_for_day)
 
             let precipitation_obj_for_day = pre.find(p =>c.date === p.ref)
             let precipitation_for_day = precipitation_obj_for_day.value
 
-            console.log('PRECIPITATION: ', precipitation_for_day)
+            //console.log('PRECIPITATION: ', precipitation_for_day)
 
             if(precipitation_for_day == 0.0){
                 // This means no precipitation so we should return based on the cloudiness
@@ -308,7 +308,7 @@ export async function load() {
                 }
             }
 
-            console.log('----------')
+            //console.log('----------')
         })
 
 
@@ -316,8 +316,8 @@ export async function load() {
     }
     
     const weather_data = generate_weather_data(avg_temps,min_temps,cloudy_percent, precip)
-    console.log('--------- WEATHER DATA --------')
-    console.log(weather_data)
+    //console.log('--------- WEATHER DATA --------')
+    //console.log(weather_data)
     
  
     

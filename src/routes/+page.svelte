@@ -23,7 +23,7 @@
         if(animationOn && time < 10000){
             time += 1
         }
-        }, 30);
+        }, 50);
 
 
         // This is the start and end times of today
